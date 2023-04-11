@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:full_delta_sync/modules/Input/input_model.dart';
 import 'package:full_delta_sync/modules/constants/temp.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -35,10 +34,11 @@ class FileManager {
     }
   }
 
-  writeJsonFile(List<SKU> skuListData) async {
+  writeJsonFile(String skuListData) async {
     try {
       final file = await _jsonFile;
-      await file.writeAsString(jsonEncode(skuListData));
+      // dynamic parseValue = jsonDecode(source)
+      await file.writeAsString(skuListData);
       print('Write Complete!');
     } catch (e) {
       print(e);

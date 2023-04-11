@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:full_delta_sync/modules/Input/input_view_model.dart';
-import 'package:full_delta_sync/modules/constants/temp.dart';
 
 class InputView extends StatefulWidget {
   @override
@@ -8,24 +7,37 @@ class InputView extends StatefulWidget {
 }
 
 class _InputViewState extends State<InputView> {
+  String inputText = '';
   List<dynamic> productList = [];
   FileManager fileManager = FileManager();
-
+  TextEditingController textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Center(
-          child: ElevatedButton(
-            onPressed: () async {
-              String path = await fileManager.directoryPath;
-              print(path);
+        Container(
+          padding: EdgeInsets.all(30.0),
+          child: TextField(
+            controller: textEditingController,
+            onChanged: (data) {
+              setState(() {
+                inputText = data;
+              });
             },
-            child: Text(
-              'Get Directory Path',
-            ),
+            maxLines: 1,
           ),
         ),
+        // Center(
+        //   child: ElevatedButton(
+        //     onPressed: () async {
+        //       String path = await fileManager.directoryPath;
+        //       print(path);
+        //     },
+        //     child: Text(
+        //       'Get Directory Path',
+        //     ),
+        //   ),
+        // ),
         Center(
           child: ElevatedButton(
             onPressed: () async {
@@ -45,11 +57,12 @@ class _InputViewState extends State<InputView> {
         Center(
           child: ElevatedButton(
             onPressed: () async {
-              await fileManager.writeJsonFile(kJsonWriteMockData);
+              await fileManager.writeJsonFile(inputText);
               dynamic json = await fileManager.readJsonFile();
               setState(() {
                 if (json != null) {
                   productList = json;
+                  textEditingController.clear();
                 }
               });
             },
