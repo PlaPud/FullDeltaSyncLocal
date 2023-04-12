@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:full_delta_sync/modules/Input/input_view_model.dart';
+import 'package:full_delta_sync/modules/product/product_model.dart';
+import 'package:full_delta_sync/modules/product/product_view_model.dart';
 
-class InputView extends StatefulWidget {
+class ProductView extends StatefulWidget {
   @override
-  State<InputView> createState() => _InputViewState();
+  State<ProductView> createState() => _ProductViewState();
 }
 
-class _InputViewState extends State<InputView> {
+class _ProductViewState extends State<ProductView> {
+  List<Product> productList = [];
   String inputText = '';
-  List<dynamic> productList = [];
-  FileManager fileManager = FileManager();
+  ProductViewModel productViewModel = ProductViewModel();
+  // delta sync need to use SKU as key (for fast access)
   TextEditingController textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -27,26 +29,11 @@ class _InputViewState extends State<InputView> {
             maxLines: 1,
           ),
         ),
-        // Center(
-        //   child: ElevatedButton(
-        //     onPressed: () async {
-        //       String path = await fileManager.directoryPath;
-        //       print(path);
-        //     },
-        //     child: Text(
-        //       'Get Directory Path',
-        //     ),
-        //   ),
-        // ),
         Center(
           child: ElevatedButton(
-            onPressed: () async {
-              dynamic json = await fileManager.readJsonFile();
-              // print(json);
+            onPressed: () {
               setState(() {
-                if (json != null) {
-                  productList = json;
-                }
+                print(productViewModel.readData());
               });
             },
             child: Text(
@@ -57,13 +44,10 @@ class _InputViewState extends State<InputView> {
         Center(
           child: ElevatedButton(
             onPressed: () async {
-              await fileManager.writeJsonFile(inputText);
-              dynamic json = await fileManager.readJsonFile();
+              await productViewModel.fullSyncWrite(inputText);
               setState(() {
-                if (json != null) {
-                  productList = json;
-                  textEditingController.clear();
-                }
+                productList = productViewModel.readData();
+                textEditingController.clear();
               });
             },
             child: Text(
@@ -77,7 +61,7 @@ class _InputViewState extends State<InputView> {
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text(
-                  '(SKU ${productList[index]})',
+                  '{title: "${productList[index].title}", price: ${productList[index].price}, remainInStock: ${productList[index].remainInStock}',
                 ),
               );
             },
