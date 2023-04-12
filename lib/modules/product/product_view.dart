@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:full_delta_sync/modules/product/product_model.dart';
 import 'package:full_delta_sync/modules/product/product_view_model.dart';
+import 'package:hive/hive.dart';
 
 class ProductView extends StatefulWidget {
   @override
@@ -13,6 +14,13 @@ class _ProductViewState extends State<ProductView> {
   ProductViewModel productViewModel = ProductViewModel();
   // delta sync need to use SKU as key (for fast access)
   TextEditingController textEditingController = TextEditingController();
+
+  @override
+  void dispose() {
+    Hive.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -33,7 +41,7 @@ class _ProductViewState extends State<ProductView> {
           child: ElevatedButton(
             onPressed: () {
               setState(() {
-                print(productViewModel.readData());
+                productList = productViewModel.readData();
               });
             },
             child: Text(
