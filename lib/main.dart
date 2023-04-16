@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:full_delta_sync/constants/button.dart';
 import 'package:full_delta_sync/modules/product/product_model.dart';
 import 'package:full_delta_sync/modules/product/product_view.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -20,12 +21,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-          elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                  minimumSize: Size(100, 38),
-                  elevation: 0,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(50)))))),
+          elevatedButtonTheme:
+              ElevatedButtonThemeData(style: buttonStyleCustom)),
       home: MyHomePage(),
     );
   }
