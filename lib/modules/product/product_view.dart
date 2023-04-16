@@ -69,8 +69,8 @@ class _ProductViewState extends State<ProductView> {
             ),
             ElevatedButton(
               style: ButtonStyle(
-                foregroundColor: getColor(Colors.white, Colors.purple),
-                backgroundColor: getColor(Colors.purple, Colors.white),
+                foregroundColor: getColor(Colors.white, Colors.teal),
+                backgroundColor: getColor(Colors.teal, Colors.white),
               ),
               onPressed: () async {
                 await productViewModel.fullSyncWrite(inputText);
@@ -125,11 +125,11 @@ class _ProductViewState extends State<ProductView> {
                     ),
                     child: ListTile(
                       title: Text(
-                        'Title: "${productList[index].title}"',
+                        'Title: ${productList[index].title}',
                       ),
-                      subtitle: Text('Price: ${productList[index].price}'),
+                      subtitle: Text('Price: ${productList[index].price} Baht'),
                       trailing:
-                          Text('Stock: ${productList[index].remainInStock}'),
+                          Text('Stock(s): ${productList[index].remainInStock}'),
                     ),
                   );
                 },
