@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:full_delta_sync/button.dart';
 import 'package:full_delta_sync/modules/product/product_model.dart';
 import 'package:full_delta_sync/modules/product/product_view_model.dart';
 import 'package:hive/hive.dart';
@@ -82,7 +81,7 @@ class _ProductViewState extends State<ProductView> {
               await productViewModel.deltaSyncWrite(inputText);
               setState(() {
                 productList = productViewModel.readData();
-                // textEditingController.clear();
+                textEditingController.clear();
               });
             },
             style: ButtonStyle(

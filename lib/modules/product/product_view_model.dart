@@ -9,11 +9,24 @@ class ProductViewModel {
     return products;
   }
 
+  List<Product> _parseToHiveObject(List<dynamic> decodedData) {
+    return decodedData.map((product) {
+      var hiveObject = Product();
+
+      hiveObject.title = product['title'];
+      hiveObject.aliasTitle = product['aliasTitle'];
+      hiveObject.barcode = product['barcode'];
+      hiveObject.sku = product['sku'];
+      hiveObject.price = product['price'];
+      hiveObject.remainInStock = product['remainInStock'];
+
+      return hiveObject;
+    }).toList();
+  }
+
   fullSyncWrite(String productListData) async {
     List<dynamic> decodedData = json.decode(productListData);
-    // List<Product> productList = _parseToHiveObject(decodedData);
-    List<Product> productList =
-        decodedData.map((json) => Product.fromJson(json)).toList();
+    List<Product> productList = _parseToHiveObject(decodedData);
     var productBox = Hive.box<Product>('products');
     await productBox.clear();
     try {
@@ -28,8 +41,7 @@ class ProductViewModel {
 
   deltaSyncWrite(String productListData) async {
     List<dynamic> decodedData = json.decode(productListData);
-    List<Product> productList =
-        decodedData.map((json) => Product.fromJson(json)).toList();
+    List<Product> productList = _parseToHiveObject(decodedData);
     var productBox = Hive.box<Product>('products');
     try {
       for (var product in productList) {
