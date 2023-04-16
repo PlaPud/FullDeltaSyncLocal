@@ -21,4 +21,17 @@ class Product extends HiveObject {
 
   @HiveField(5)
   late final int remainInStock;
+
+  Product({title, aliasTitle, barcode, sku, price, remainInStock});
+
+  factory Product.fromJson(dynamic json) {
+    return Product(
+      title: json['title'],
+      aliasTitle: json['aliasTitle'],
+      barcode: json['barcode'],
+      sku: json['sku'],
+      price: json['price'],
+      remainInStock: json['remainInStock'],
+    );
+  }
 }
