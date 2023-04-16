@@ -37,9 +37,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.teal[100],
+      backgroundColor: Colors.grey[300],
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        elevation: 0,
+        backgroundColor: Colors.pink,
         title: const Text('Test For Writing File (JSON)'),
       ),
       body: ProductView(),
