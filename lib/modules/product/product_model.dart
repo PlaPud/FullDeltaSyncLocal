@@ -1,4 +1,6 @@
 import 'package:hive/hive.dart';
+import 'package:full_delta_sync/logging.dart';
+
 part 'product_model.g.dart';
 
 @HiveType(typeId: 0)
@@ -30,14 +32,35 @@ class Product extends HiveObject {
     required this.remainInStock,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
-      title: json['title'].toString(),
-      aliasTitle: json['aliasTitle'].toString(),
-      barcode: json['barcode'].toString(),
-      sku: json['sku'].toString(),
-      price: double.parse(json['price'].toString()),
-      remainInStock: int.parse(json['remainInStock'].toString()),
-    );
+  factory Product.fromJson(Map<String, dynamic> json, String typeOfSync) {
+    var time = DateTime.now();
+    final log = logger;
+    double priceDatatypeChecked = -1;
+    int remainInStockDatatypeChecked = -1;
+    try {
+      if (json['price'] is! double) {
+        priceDatatypeChecked = json['price'].toDouble();
+      } else {
+        priceDatatypeChecked = json['price'];
+      }
+
+      if (json['remainInStock'] is! int) {
+        remainInStockDatatypeChecked = json['remainInStock'].toInt();
+      } else {
+        remainInStockDatatypeChecked = json['remainInStock'];
+      }
+      Product product = Product(
+        title: json['title'],
+        aliasTitle: json['aliasTitle'],
+        barcode: json['barcode'],
+        sku: json['sku'],
+        price: priceDatatypeChecked,
+        remainInStock: remainInStockDatatypeChecked,
+      );
+      return product;
+    } catch (_) {
+      log.e("Error in $typeOfSync on Product'sku: ${json['sku']} at $time");
+      rethrow;
+    }
   }
 }

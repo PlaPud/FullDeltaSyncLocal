@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:full_delta_sync/modules/product/product_model.dart';
 import 'package:full_delta_sync/modules/product/product_view_model.dart';
 import 'package:hive/hive.dart';
 
@@ -10,9 +9,8 @@ class ProductView extends StatefulWidget {
 }
 
 class _ProductViewState extends State<ProductView> {
-  List<Product> productList = [];
   String inputText = '';
-  ProductViewModel productViewModel = ProductViewModel();
+  final ProductViewModel _viewModel = ProductViewModel();
   // delta sync need to use SKU as key (for fast access)
   TextEditingController textEditingController = TextEditingController();
 
@@ -55,9 +53,7 @@ class _ProductViewState extends State<ProductView> {
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             ElevatedButton(
               onPressed: () {
-                setState(() {
-                  productList = productViewModel.readData();
-                });
+                setState(() {});
               },
               style: ButtonStyle(
                 foregroundColor: getColor(Colors.white, Colors.redAccent),
@@ -73,9 +69,9 @@ class _ProductViewState extends State<ProductView> {
                 backgroundColor: getColor(Colors.teal, Colors.white),
               ),
               onPressed: () async {
-                await productViewModel.fullSyncWrite(inputText);
+                await _viewModel.onUserTappedFullSync(
+                    productListData: inputText);
                 setState(() {
-                  productList = productViewModel.readData();
                   textEditingController.clear();
                 });
               },
@@ -85,9 +81,9 @@ class _ProductViewState extends State<ProductView> {
             ),
             ElevatedButton(
               onPressed: () async {
-                await productViewModel.deltaSyncWrite(inputText);
+                await _viewModel.onUserTappedDeltaSync(
+                    productListData: inputText);
                 setState(() {
-                  productList = productViewModel.readData();
                   textEditingController.clear();
                 });
               },
@@ -105,15 +101,9 @@ class _ProductViewState extends State<ProductView> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(30, 14, 30, 20),
             child: Container(
-              // padding: const EdgeInsets.fromLTRB(10, 20, 30, 20),
-              decoration: const BoxDecoration(
-                  // color: Colors.white,
-                  // borderRadius: BorderRadius.all(
-                  //   Radius.circular(20),
-                  // ),
-                  ),
+              decoration: const BoxDecoration(),
               child: ListView.builder(
-                itemCount: productList.length,
+                itemCount: (_viewModel.productList).length,
                 itemBuilder: (context, index) {
                   return Container(
                     margin: const EdgeInsets.only(bottom: 20),
@@ -125,11 +115,12 @@ class _ProductViewState extends State<ProductView> {
                     ),
                     child: ListTile(
                       title: Text(
-                        'Title: ${productList[index].title}',
+                        'Title: ${_viewModel.onUserTappedReadData()[index].title}',
                       ),
-                      subtitle: Text('Price: ${productList[index].price} Baht'),
-                      trailing:
-                          Text('Stock(s): ${productList[index].remainInStock}'),
+                      subtitle: Text(
+                          'Price: ${_viewModel.onUserTappedReadData()[index].price} Baht'),
+                      trailing: Text(
+                          'Stock(s): ${_viewModel.onUserTappedReadData()[index].remainInStock}'),
                     ),
                   );
                 },

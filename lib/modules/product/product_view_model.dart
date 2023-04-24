@@ -3,39 +3,35 @@ import 'package:full_delta_sync/modules/product/product_model.dart';
 import 'package:hive/hive.dart';
 
 class ProductViewModel {
-  List<Product> readData() {
+  List<Product> productList = [];
+  List<Product> onUserTappedReadData() {
     var productBox = Hive.box<Product>('products');
-    List<Product> products = productBox.values.toList().cast<Product>();
-    return products;
+    productList = productBox.values.toList().cast<Product>();
+    return productList;
   }
 
-  fullSyncWrite(String productListData) async {
-    try {
-      List<dynamic> decodedData = json.decode(productListData);
-      List<Product> productList =
-          decodedData.map((json) => Product.fromJson(json)).toList();
-      var productBox = Hive.box<Product>('products');
-      await productBox.clear();
-      for (var product in productList) {
-        productBox.put(product.sku, product);
-      }
-    } catch (e) {
-      print(e);
+  Future<void> onUserTappedDeltaSync({required String productListData}) async {
+    List<dynamic> decodedData = json.decode(productListData);
+    var productBox = Hive.box<Product>('products');
+    for (dynamic product in decodedData) {
+      try {
+        Product temp = Product.fromJson(product, "Delta Sync");
+        productBox.put(temp.sku, temp);
+      } catch (_) {}
     }
+    productList = onUserTappedReadData();
   }
 
-  deltaSyncWrite(String productListData) async {
-    try {
-      List<dynamic> decodedData = json.decode(productListData);
-      List<Product> productList = [];
-      productList = decodedData.map((json) => Product.fromJson(json)).toList();
-      var productBox = Hive.box<Product>('products');
-
-      for (var product in productList) {
-        productBox.put(product.sku, product);
-      }
-    } catch (e) {
-      print(e);
+  Future<void> onUserTappedFullSync({required String productListData}) async {
+    List<dynamic> decodedData = json.decode(productListData);
+    var productBox = Hive.box<Product>('products');
+    await productBox.clear();
+    for (dynamic product in decodedData) {
+      try {
+        Product temp = Product.fromJson(product, "Full Sync");
+        productBox.put(temp.sku, temp);
+      } catch (_) {}
     }
+    productList = onUserTappedReadData();
   }
 }
