@@ -32,7 +32,8 @@ class Product extends HiveObject {
     required this.remainInStock,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json, String typeOfSync) {
+  factory Product.fromJson(
+      {required Map<String, dynamic> json, required String typeOfSync}) {
     var time = DateTime.now();
     final log = logger;
     double priceDatatypeChecked = -1;

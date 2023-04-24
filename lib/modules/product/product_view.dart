@@ -56,8 +56,10 @@ class _ProductViewState extends State<ProductView> {
                 setState(() {});
               },
               style: ButtonStyle(
-                foregroundColor: getColor(Colors.white, Colors.redAccent),
-                backgroundColor: getColor(Colors.red, Colors.white),
+                foregroundColor: getColor(
+                    color: Colors.white, colorPressed: Colors.redAccent),
+                backgroundColor:
+                    getColor(color: Colors.red, colorPressed: Colors.white),
               ),
               child: const Text(
                 'Read JSON',
@@ -65,8 +67,10 @@ class _ProductViewState extends State<ProductView> {
             ),
             ElevatedButton(
               style: ButtonStyle(
-                foregroundColor: getColor(Colors.white, Colors.teal),
-                backgroundColor: getColor(Colors.teal, Colors.white),
+                foregroundColor:
+                    getColor(color: Colors.white, colorPressed: Colors.teal),
+                backgroundColor:
+                    getColor(color: Colors.teal, colorPressed: Colors.white),
               ),
               onPressed: () async {
                 await _viewModel.onUserTappedFullSync(
@@ -88,8 +92,10 @@ class _ProductViewState extends State<ProductView> {
                 });
               },
               style: ButtonStyle(
-                foregroundColor: getColor(Colors.white, Colors.blue),
-                backgroundColor: getColor(Colors.blue, Colors.white),
+                foregroundColor:
+                    getColor(color: Colors.white, colorPressed: Colors.blue),
+                backgroundColor:
+                    getColor(color: Colors.blue, colorPressed: Colors.white),
               ),
               child: const Text(
                 'Write (Delta)',
@@ -115,12 +121,12 @@ class _ProductViewState extends State<ProductView> {
                     ),
                     child: ListTile(
                       title: Text(
-                        'Title: ${_viewModel.onUserTappedReadData()[index].title}',
+                        'Title: ${(_viewModel.productList)[index].title}',
                       ),
                       subtitle: Text(
-                          'Price: ${_viewModel.onUserTappedReadData()[index].price} Baht'),
+                          'Price: ${(_viewModel.productList)[index].price} Baht'),
                       trailing: Text(
-                          'Stock(s): ${_viewModel.onUserTappedReadData()[index].remainInStock}'),
+                          'Stock(s): ${(_viewModel.productList)[index].remainInStock}'),
                     ),
                   );
                 },
@@ -132,7 +138,8 @@ class _ProductViewState extends State<ProductView> {
     );
   }
 
-  MaterialStateProperty<Color> getColor(Color color, Color colorPressed) {
+  MaterialStateProperty<Color> getColor(
+      {required Color color, required Color colorPressed}) {
     getColor(Set<MaterialState> states) {
       if (states.contains(MaterialState.pressed)) {
         return colorPressed;

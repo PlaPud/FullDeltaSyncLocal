@@ -15,7 +15,8 @@ class ProductViewModel {
     var productBox = Hive.box<Product>('products');
     for (dynamic product in decodedData) {
       try {
-        Product temp = Product.fromJson(product, "Delta Sync");
+        Product temp =
+            Product.fromJson(json: product, typeOfSync: "Delta Sync");
         productBox.put(temp.sku, temp);
       } catch (_) {}
     }
@@ -28,7 +29,7 @@ class ProductViewModel {
     await productBox.clear();
     for (dynamic product in decodedData) {
       try {
-        Product temp = Product.fromJson(product, "Full Sync");
+        Product temp = Product.fromJson(json: product, typeOfSync: "Full Sync");
         productBox.put(temp.sku, temp);
       } catch (_) {}
     }
